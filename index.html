@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegetable Order Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <style>
+        body, h1, h2, button, textarea { 
+            font-family: 'Comic Sans MS', sans-serif; 
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Make sure the footer sticks to the bottom of the page */
+        html, body {
+            height: 100%;
+				background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('img/background.jpg');
+   			background-size: cover; /* Ensures the image covers the entire viewport */
+    			background-repeat: repeat; /* Prevents tiling */
+    			background-position: center; /* Centers the image */
+    			background-attachment: scroll;
+    			margin: 0;
+    			padding: 0;			
+    			}
+
+        .container {
+            padding: 0px;
+            background-color: transparent; /* Ensures no white background */
+            z-index: 1; /* Ensures the content scrolls above the background */
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+            width: 100%; /* Ensures the items are equal in width */
+        }
+
+        .form-section label {
+            font-weight: bold;
+        }
+        
+        .vegetable-grid {
+            flex: 1; /* Ensures the container takes up the remaining space */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 5px;
+            background-color: transparent; /* Removes any white background in the grid */
+
+        }
+
+        .item {
+            width: 18%; /* Ensures the items are equal in width */
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            /*background-color: #f8b195; /* Default background, will be overridden per item */
+            height: 250px; /* Set the height for consistency */
+            background-color: rgba(248, 177, 149, 0.9); /* Slightly transparent color for items */
+    			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds subtle shadow for better readability */
+    			text-align: center;
+        }
+
+        .item img {
+            width: 100%;
+            max-width: 200px;
+            height: 165px;
+            object-fit: cover; /* Ensures images fit properly */
+            border-radius: 15px /*Rounded corner*/
+        }
+
+        .item .textarea-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .item textarea {
+            width: 120px;
+            height: 20px;
+            resize: none;
+        }
+
+        .item .units {
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        .item h2 {
+            margin-bottom: 10px;
+        }
+
+/*        .submit-button {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background-color: #ff5722;
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-weight: bold;
+        } */
+
+			.submit-button {
+				    position: fixed;
+				    background-color: #ff5722;
+				    color: white;
+				    border: none;
+				    font-size: 16px;
+				    font-weight: bold;
+				    cursor: pointer;
+				    z-index: 1000; /* Keeps it above other content */
+				    text-align: center;
+				    transition: all 0.3s ease;
+			}
+
+			/* Desktop: Vertical Side Button */
+			@media (min-width: 769px) {
+			    .submit-button {
+			        top: 50%; /* Centers it vertically */
+			        right: 0; /* Positions it to the right */
+			        transform: translateY(-50%); /* Ensures it's vertically centered */
+			        padding: 20px;
+ 	   		     writing-mode: vertical-rl; /* Rotates text for vertical layout */
+			        text-orientation: upright;
+			        border-radius: 5px 0 0 5px; /* Rounded corner on the left side */
+			        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ 		   }
+
+ 		   .submit-button:hover {
+		        background-color: #e64a19;
+		    }
+			}
+
+			/* Mobile: Bottom Floating Button */
+			@media (max-width: 768px) {
+			    .submit-button {
+				        bottom: 0; /* Sticks to the bottom of the screen */
+ 					     left: 0;
+				        right: 0;
+				        width: 100%; /* Full width for mobile */
+				        padding: 15px;
+				        text-align: center;
+				        border-radius: 0; /* No rounded corners */
+				        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Shadow above the button */
+			    }
+
+			    .submit-button:hover {
+			        background-color: #e64a19;
+ 			   }
+			}
+
+        footer {
+            background-color: #2c3e50 !important;  /* Ensures footer background color */
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Responsive Design for Various Screen Sizes */
+        @media (max-width: 1024px) {
+            .item {
+                width: 23%; /* 4 items per row for medium screens (tablets) */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .item {
+                width: 45%; /* 2 items per row for smaller screens (tablets) */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .item {
+                width: 100%; /* 1 item per row for mobile */
+            }
+
+            footer {
+                font-size: 14px; /* Smaller footer text on mobile */
+            }
+        }
+
+
+		/* Ensure the background is respected in print */
+			@media print {
+			    html, body {	
+				        height: auto; /* Adjusts height for printing */
+				        -webkit-print-color-adjust: exact; /* Ensures colors and backgrounds are printed accurately */
+				        background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('img/background.jpg');
+						  background-size: cover; 
+        				  background-repeat: no-repeat; 
+				        background-position: center;
+ 					   }
+			}
+
+        /* Header Styles */
+        .hero-body {
+            display: flex;
+            justify-content: center;  /* Center content horizontally */
+            align-items: center;      /* Center content vertically */
+            text-align: center;       /* Center text inside the div */
+            height: 100%;             /* Ensure full height of hero section */
+        }
+
+        .title {
+            font-size: 2.5rem; /* Adjust the title size */
+            font-weight: bold;
+        }
+        
+        .field.is-grouped {
+			  display: flex;
+			  align-items: center;
+			}
+
+		  .control {
+				margin-left: 10px; /* Adds space between input and checkbox */
+			}
+
+			.checkbox {
+  				font-weight: normal;
+			}
+
+    </style>
+  </head>
+  <body>
+    <section class="hero is-primary is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">Thaamiraa Vegetable Order Form</h1>
+        </div>
+      </div>
+    </section>
+
+    <form id="form" class="container m-4 pl-4" method="POST">
+
+	<!-- Customer Information Section -->
+			<div class="columns is-vcentered is-multiline form-section">
+				<div class="column is-half">
+        				<label for="customerName" class="label">Customer Name: *</label>
+			         <input type="text" id="customerName" name="customerName" class="input" placeholder="Enter your name" required>
+				</div>  
+  
+				<div class="column is-half">
+  						<label for="customerMobile" class="label">Customer Mobile Number: *</label>
+  						<div class="field is-grouped">
+   						 <div class="control is-expanded">
+      							<input type="tel" id="customerMobile" name="customerMobile" class="input" placeholder="Enter your mobile number" required>
+    						 </div>
+    						 <div class="control">
+      							<label class="checkbox">
+        									<input type="checkbox" id="isWhatsapp" name="isWhatsapp">
+        													Is this your WhatsApp number?
+      									</label>
+    						 </div>
+  						</div>
+				</div>
+			</div>
+
+
+      <div class="vegetable-grid">
+          <!-- Row 1: Vegetable Names, Images, and Text Areas for Quantities -->
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Capsicum</h2>
+              <img src="img\vegetable1.jpg" alt="Capsicum">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Capsicum"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Cauliflower</h2>
+              <img src="img\vegetable2.jpg" alt="Cauliflower">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Cauliflower"></textarea>
+                  <span class="units">Pieces</span>
+              </div>
+          </div>
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Cucumber</h2>
+              <img src="img\vegetable3.jpg" alt="Cucumber">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Cucumber"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Snake Gourd</h2>
+              <img src="img\vegetable4.jpg" alt="Snake Gourd">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Snake gourd"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Tomato</h2>
+              <img src="img\tomato.jpg" alt="Vegetable 5">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Tomato"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+
+          <!-- Row 2: Vegetable Names, Images, and Text Areas for Quantities -->
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Peerkangai/Ridge Gourd</h2>
+              <img src="img\ridge-gourd.jpeg" alt="Peerkangai Ridge Gourd">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Ridge gourd"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Avarakkai/Broad beans</h2>
+              <img src="img\broad_beans.jpg" alt="Avarakkai Broad beans">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Avarakkai"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Beetroot</h2>
+              <img src="img\beatroot.jpg" alt="Vegetable 8">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Beatroot"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Beans</h2>
+              <img src="img\beans.jpg" alt="Beans">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Beans"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+          <div class="item" style="background-color: #f8b195;">
+              <h2>Bitter Gourd/Pagarkai</h2>
+              <img src="img\bitter-gourd.jpg" alt="Vegetable 10">
+              <div class="textarea-container">
+                  <textarea placeholder="Enter quantity in" name="Bitter Gourd"></textarea>
+                  <span class="units">grams</span>
+              </div>
+          </div>
+
+          <!-- Row 3: Vegetable Names, Images, and Text Areas for Quantities -->
+		 <div class="item" style="background-color: #f8b195;">
+            <h2>Sweat Corn</h2>
+            <img src="img\corn.jpg" alt="Sweat Corn">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Sweat Corn"></textarea>
+                <span class="units">Pieces</span>
+            </div>
+        </div>
+        <div class="item" style="background-color: #f8b195;">
+            <h2>Small Onions</h2>
+            <img src="img\Small-Onions.jpg" alt="Small Onions">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Small Onions"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+        <div class="item" style="background-color: #f8b195;">
+            <h2>Big Onions</h2>
+            <img src="img\big-onions.jpg" alt="Big Onions">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Big Onions"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+        <div class="item" style="background-color: #f8b195;">
+            <h2>Colacasia/sepengkizhangu</h2>
+            <img src="img\colacasia.jpg" alt="colacasia">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Colacasia"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+        <div class="item" style="background-color: #f8b195;">
+            <h2>Carrot</h2>
+            <img src="img\carrot.jpg" alt="Carrot">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Carrot"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+          <!-- Row 4: Vegetable Names, Images, and Text Areas for Quantities -->
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Brinjal</h2>
+            <img src="img\brinjal.jpg" alt="Brinjal">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Brinjal"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Ginger</h2>
+            <img src="img\ginger.jpg" alt="Ginger">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Ginger"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Chow Chow</h2>
+            <img src="img\chow-chow.jpg" alt="Chow Chow">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="ChowChow"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Cabbage</h2>
+            <img src="img\cabbage.jpg" alt="Cabbage">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Cabbage"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Green Chilly</h2>
+            <img src="img\greenchilly.jpg" alt="Green Chilly">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Green Chilly"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+          <!-- Row 5: Vegetable Names, Images, and Text Areas for Quantities -->
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Kovakkai</h2>
+            <img src="img\kovakkai.jpg" alt="Kovakkai">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Kovakkai"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Green Peas</h2>
+            <img src="img\greenpeas.jpg" alt="Green Peas">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Green Peas"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Potato</h2>
+            <img src="img\potato.jpg" alt="Potato">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Potato"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Radish</h2>
+            <img src="img\radish.jpg" alt="Radish">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Radish"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+
+		  <div class="item" style="background-color: #f8b195;">
+            <h2>Ladys Finger</h2>
+            <img src="img\vendakkai.jpg" alt="Vendakkai">
+            <div class="textarea-container">
+                <textarea placeholder="Enter quantity in" name="Vendakkai"></textarea>
+                <span class="units">grams</span>
+            </div>
+        </div>
+        
+          <!-- Floating Submit Button moved inside the form -->
+          <button class="submit-button" type="submit" id="submit-button">SUBMIT</button>
+      </div>
+    </form>
+    <div
+      id="message"
+      style="
+        display: none;
+        margin: 20px;
+        font-weight: bold;
+        color: green;
+        padding: 8px;
+        background-color: beige;
+        border-radius: 4px;
+        border-color: aquamarine;
+      "
+    ></div>
+    <!-- Footer -->
+    <footer>
+        <div class="content">
+            <p>&copy; 2024 Thaamiraa. All rights reserved.</p>
+            <p>Designed with care by Thaamiraa</p>
+        </div>
+    </footer>
+
+    <script>
+      document.getElementById("form").addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent the default form submission
+        document.getElementById("message").textContent = "Submitting..";
+        document.getElementById("message").style.display = "block";
+        document.getElementById("submit-button").disabled = true;
+
+        // Collect the form data
+        var formData = new FormData(this);
+        var keyValuePairs = [];
+        for (var pair of formData.entries()) {
+          keyValuePairs.push(pair[0] + "=" + pair[1]);
+        }
+
+		    // Add the timestamp and status
+		    var timestamp = new Date().toISOString(); // ISO 8601 format timestamp
+		    keyValuePairs.unshift("Timestamp=" + timestamp); // Add timestamp at the beginning
+		    keyValuePairs.push("Status=Submitted"); // Add status at the end
+
+        var formDataString = keyValuePairs.join("&");
+
+        // Send a POST request to your Google Apps Script
+        fetch(
+          "https://script.google.com/macros/s/AKfycby_UgSuLv_gtBNsNIep0UkNOQTmTgRt9Qs4iyCxyVAYZf87SWTjy4OplY5MkFN5ERwcHg/exec",
+          {
+            redirect: "follow",
+            method: "POST",
+            body: formDataString,
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+          }
+        )
+          .then(function (response) {
+            // Check if the request was successful
+            if (response) {
+              return response; // Assuming your script returns JSON response
+            } else {
+              throw new Error("Failed to submit the form.");
+            }
+          })
+          .then(function (data) {
+            // Display a success message
+            document.getElementById("message").textContent =
+              "Data submitted successfully!";
+            document.getElementById("message").style.display = "block";
+            document.getElementById("message").style.backgroundColor = "green";
+            document.getElementById("message").style.color = "beige";
+            document.getElementById("submit-button").disabled = false;
+            document.getElementById("form").reset();
+
+            setTimeout(function () {
+              document.getElementById("message").textContent = "";
+              document.getElementById("message").style.display = "none";
+            }, 2600);
+          })
+          .catch(function (error) {
+            // Handle errors
+            console.error(error);
+            document.getElementById("message").textContent =
+              "An error occurred while submitting the form.";
+            document.getElementById("message").style.display = "block";
+          });
+      });
+    </script>
+  </body>
+</html>
